@@ -2,7 +2,6 @@
 import { Menu, MenuItem, Button } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-// import PersonIcon from "@mui/icons-material/Person";
 //import { useNavigate } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -36,6 +35,48 @@ const filterOptions = [
   { id: 6, label: "Body Type" },
   { id: 7, label: "Transmission" },
 ];
+// Function for price range formatting
+const priceRanges = [
+  "Under 3 Lakhs",
+  "3 - 4 Lakhs",
+  "4 - 5 Lakhs",
+  "5 - 6 Lakhs",
+];
+//Make and Model options
+const makeAndModelOptions = [
+  "Maruti Suzuki",
+  "Renault",
+  "Tata",
+  "Mahindra",
+  "Skoda",
+];
+// Year options
+const yearOptions = [
+  "2022 and above",
+  "2020 and above",
+  "2018 and above",
+  "2016 and above",
+  "2014 and above",
+  "2012 and above",
+  "2010 and above",
+  "2008 and above",
+];
+// Fuel options
+const fuelOptions = ["Petrol", "Diesel", "CNG", "Electric"];
+// KM Driven options
+const kmDrivenOptions = [
+  "10,000kms or less",
+  "30,000kms or less",
+  "50,000kms or less",
+  "75,000kms or less",
+  "1,00,000kms or less",
+  "1,25,000kms or less",
+  "1,50,000kms or less",
+];
+// Body Type options
+const bodyTypeOptions = ["Hatchback", "Sedan", "SUV", "MUV"];
+// Transmission options
+const transmissionOptions = ["Manual", "Automatic"];
 //Carousel items data
 const carouselItems = [
   {
@@ -60,6 +101,7 @@ const carouselItems = [
 
 //Cities
 const cities = ["Hyderabad", "Bangalore", "Chennai", "Mumbai", "Delhi"];
+  
 
 export const Desktop = () => {
   const [buyCarAnchor, setBuyCarAnchor] = useState(null);
@@ -96,17 +138,31 @@ export const Desktop = () => {
   };
   //Account
   const [accountAnchor, setAccountAnchor] = useState(null);
-const isAccountOpen = Boolean(accountAnchor);
+  const isAccountOpen = Boolean(accountAnchor);
 
-const handleAccountClick = (event) => {
-  setAccountAnchor(event.currentTarget);
-};
+  const handleAccountClick = (event) => {
+    setAccountAnchor(event.currentTarget);
+  };
 
-const handleAccountClose = () => {
-  setAccountAnchor(null);
-};
+  const handleAccountClose = () => {
+    setAccountAnchor(null);
+  };
+//Price Range
+const [selectedPrice, setSelectedPrice] = useState("");
+//Make and Model
+const [selectedMakeModel, setSelectedMakeModel] = useState("");
+//Year
+const [selectedYear, setSelectedYear] = useState("");
+// State for Fuel selection
+const [selectedFuel, setSelectedFuel] = useState("");
+// State for KM Driven selection
+const [selectedKmDriven, setSelectedKmDriven] = useState("");
+// State for Body Type selection
+const [selectedBodyType, setSelectedBodyType] = useState("");
+// State for Transmission selection
+const [selectedTransmission, setSelectedTransmission] = useState("");
 
-  // const navigate = useNavigate();
+
 
   // const handleNavigate = () => {
   //   navigate("/cars"); // Redirect to Cars.jsx
@@ -621,13 +677,13 @@ const handleAccountClose = () => {
             } else if (index === 2) {
               leftPosition = "587px";
             } else if (index === 3) {
-              leftPosition = "763px";
+              leftPosition = "785px";
             } else if (index === 4) {
-              leftPosition = "970px";
+              leftPosition = "985px";
             } else if (index === 5) {
-              leftPosition = "1145px";
+              leftPosition = "1185px";
             } else {
-              leftPosition = "1327px";
+              leftPosition = "1387px";
             }
 
             return (
@@ -649,30 +705,331 @@ const handleAccountClose = () => {
                       height: "49px",
                     }}
                   >
-                    <Select
-                      value=""
-                      displayEmpty
-                      sx={{
-                        position: "absolute",
-                        width: "100%",
-                        height: "49px",
-                        top: 0,
-                        left: 0,
-                        bgcolor: "primary.light",
-                        color: "text.primary",
-                        "& .MuiSelect-select": {
-                          paddingTop: "11px",
-                          textAlign: "center",
-                        },
-                      }}
-                      IconComponent={KeyboardArrowDownIcon}
-                    >
-                      <MenuItem value="">
-                        <Typography sx={{ textAlign: "center" }}>
-                          {option.label}
-                        </Typography>
-                      </MenuItem>
-                    </Select>
+                    <Box sx={{ width: "100%" }}>
+                      {option.label === "Prize Range" ? (
+                        <Select
+                        value={selectedPrice}
+                        onChange={(e) => setSelectedPrice(e.target.value)}
+                        displayEmpty
+                        renderValue={(selected) => {
+                          // Show "Price Range" as placeholder if nothing is selected
+                          return selected ? selected : "Price Range";
+                        }}
+                        sx={{
+                          position: "absolute",
+                          width: "100%",
+                          height: "49px",
+                          top: 0,
+                          left: 0,
+                          bgcolor: "primary.light", // Make sure this is the same as "Buy Car"
+                          color: "text.primary",
+                          // borderRadius: "8px", // Add border-radius if needed
+                          // border: "1px solid #ccc", // Match Buy Car dropdown border
+                          "& .MuiSelect-select": {
+                            paddingTop: "18px",
+                            textAlign: "center",
+                            fontWeight: "bold", // Ensure the same font styling
+                            color: "white", // Ensure text is visible on primary.main background
+                          },
+                          "&:hover": {
+                            bgcolor: "#63268B", // Match "More" dropdown hover color
+                          },
+                          "&.Mui-focused": {
+                            bgcolor: "#561381", // Change background when focused
+                          },
+                        }}
+                        MenuProps={{
+                          PaperProps: {
+                            sx: {
+                              bgcolor: "#561381", // Ensure entire dropdown menu is #561381
+                              color: "white",
+                            },
+                          },
+                        }}
+                        IconComponent={KeyboardArrowDownIcon}
+                      >
+                        {priceRanges.map((range, index) => (
+                          <MenuItem key={index} value={range}
+                          sx={{
+                            backgroundColor: "primary.light",
+                            "&:hover": { backgroundColor: "#63268B", color: "white" }, // Match More dropdown hover
+                          }}
+                          >
+                            {range}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      
+                      ) : option.label === "Make And Model" ? (
+                        // Make and Model Dropdown
+                        <Select
+                          value={selectedMakeModel}
+                          onChange={(e) => setSelectedMakeModel(e.target.value)}
+                          displayEmpty
+                          renderValue={(selected) => (selected ? selected : "Make And Model")}
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light",
+                            color: "text.primary",
+                            "& .MuiSelect-select": {
+                              paddingTop: "18px",
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              color: "white",
+                            },
+                            "&:hover": {
+                              bgcolor: "#63268B",
+                            },
+                            "&.Mui-focused": {
+                              bgcolor: "#561381",
+                            },
+                          }}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                bgcolor: "#561381",
+                                color: "white",
+                              },
+                            },
+                          }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          {makeAndModelOptions.map((model, index) => (
+                            <MenuItem
+                              key={index}
+                              value={model}
+                              sx={{
+                                backgroundColor: "primary.light",
+                                "&:hover": { backgroundColor: "#63268B", color: "white" },
+                              }}
+                            >
+                              {model}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )
+                      : option.label === "Year" ? (
+                        // Year Dropdown
+                        <Select
+                          value={selectedYear}
+                          onChange={(e) => setSelectedYear(e.target.value)}
+                          displayEmpty
+                          renderValue={(selected) => (selected ? selected : "Year")}
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light",
+                            color: "text.primary",
+                            "& .MuiSelect-select": {
+                              paddingTop: "18px",
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              color: "white",
+                            },
+                            "&:hover": {
+                              bgcolor: "#63268B",
+                            },
+                            "&.Mui-focused": {
+                              bgcolor: "#561381",
+                            },
+                          }}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                bgcolor: "#561381",
+                                color: "white",
+                              },
+                            },
+                          }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          {yearOptions.map((year, index) => (
+                            <MenuItem
+                              key={index}
+                              value={year}
+                              sx={{
+                                backgroundColor: "primary.light",
+                                "&:hover": { backgroundColor: "#63268B", color: "white" },
+                              }}
+                            >
+                              {year}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )
+                      :option.label === "Fuel" ? (
+                        <Select
+                          value={selectedFuel}
+                          onChange={(e) => setSelectedFuel(e.target.value)}
+                          displayEmpty
+                          renderValue={(selected) => (selected ? selected : "Fuel")}
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light",
+                            color: "text.primary",
+                            "& .MuiSelect-select": {
+                              paddingTop: "18px",
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              color: "white",
+                            },
+                            "&:hover": {
+                              bgcolor: "#63268B",
+                            },
+                            "&.Mui-focused": {
+                              bgcolor: "#561381",
+                            },
+                          }}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                bgcolor: "#561381",
+                                color: "white",
+                              },
+                            },
+                          }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          {fuelOptions.map((fuel, index) => (
+                            <MenuItem
+                              key={index}
+                              value={fuel}
+                              sx={{
+                                backgroundColor: "primary.light",
+                                "&:hover": { backgroundColor: "#63268B", color: "white" },
+                              }}
+                            >
+                              {fuel}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )
+                      :option.label === "KM Driven" ? (
+                      // KM Driven Dropdown
+                        <Select
+                          value={selectedKmDriven}
+                          onChange={(e) => setSelectedKmDriven(e.target.value)}
+                          displayEmpty
+                          renderValue={(selected) => (selected ? selected : "KM Driven")}
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light",
+                            color: "text.primary",
+                            "& .MuiSelect-select": { paddingTop: "18px", textAlign: "center", fontWeight: "bold", color: "white" },
+                            "&:hover": { bgcolor: "#63268B" },
+                            "&.Mui-focused": { bgcolor: "#561381" },
+                          }}
+                          MenuProps={{ PaperProps: { sx: { bgcolor: "#561381", color: "white" } } }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          {kmDrivenOptions.map((km, index) => (
+                            <MenuItem key={index} value={km} sx={{ backgroundColor: "primary.light", "&:hover": { backgroundColor: "#63268B", color: "white" } }}>
+                              {km}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )
+                      :option.label === "Body Type" ? (
+                        // Body Type Dropdown
+                        <Select
+                          value={selectedBodyType}
+                          onChange={(e) => setSelectedBodyType(e.target.value)}
+                          displayEmpty
+                          renderValue={(selected) => (selected ? selected : "Body Type")}
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light",
+                            color: "text.primary",
+                            "& .MuiSelect-select": { paddingTop: "18px", textAlign: "center", fontWeight: "bold", color: "white" },
+                            "&:hover": { bgcolor: "#63268B" },
+                            "&.Mui-focused": { bgcolor: "#561381" },
+                          }}
+                          MenuProps={{ PaperProps: { sx: { bgcolor: "#561381", color: "white" } } }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          {bodyTypeOptions.map((type, index) => (
+                            <MenuItem key={index} value={type} sx={{ backgroundColor: "primary.light", "&:hover": { backgroundColor: "#63268B", color: "white" } }}>
+                              {type}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )
+                      :option.label === "Transmission" ? (
+                        //Transmission Dropdown
+                        <Select
+                          value={selectedTransmission}
+                          onChange={(e) => setSelectedTransmission(e.target.value)}
+                          displayEmpty
+                          renderValue={(selected) => (selected ? selected : "Transmission")}
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light",
+                            color: "text.primary",
+                            "& .MuiSelect-select": { paddingTop: "18px", textAlign: "center", fontWeight: "bold", color: "white" },
+                            "&:hover": { bgcolor: "#63268B" },
+                            "&.Mui-focused": { bgcolor: "#561381" },
+                          }}
+                          MenuProps={{ PaperProps: { sx: { bgcolor: "#561381", color: "white" } } }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          {transmissionOptions.map((trans, index) => (
+                            <MenuItem key={index} value={trans} sx={{ backgroundColor: "primary.light", "&:hover": { backgroundColor: "#63268B", color: "white" } }}>
+                              {trans}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) 
+                      : (
+                      //default Dropdown for sub header
+                        <Select
+                          value=""
+                          displayEmpty
+                          sx={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "49px",
+                            top: 0,
+                            left: 0,
+                            bgcolor: "primary.light", // Keep the same style as other filters
+                            color: "text.primary",
+                            "& .MuiSelect-select": {
+                              paddingTop: "11px",
+                              textAlign: "center",
+                            },
+                          }}
+                          IconComponent={KeyboardArrowDownIcon}
+                        >
+                          <MenuItem value="">
+                            <Typography sx={{ textAlign: "center" }}>
+                              {option.label}
+                            </Typography>
+                          </MenuItem>
+                        </Select>
+                      )}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
